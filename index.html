@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowing Card Houses</title>
+    <style>
+     #CardsDisplayContainer{
+   justify-content: space-between;
+    width: auto;
+    height: auto;
+    background: green;
+}
+#CardHolderContainer{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: auto;
+    height: auto;
+    background: green;
+}
+.inner{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    margin: 20px;
+    border: 20px black;
+}
+img{
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+}
+body{
+    background: green;
+}
+button{
+    margin: 20px;
+}
+</style>
+
+</head>
+<body>
+<div id="CardsDisplayContainer"></div>
+<div id="CardHolderContainer">
+
+<div class="inner" ><img src="JPEG/spade.png" id="100" ondragover="allowdrop(event)" ondrop="drop(event)" /></div>
+<div class="inner" ><img src="JPEG/diamond.jpg" id="101" ondragover="allowdrop(event)" ondrop="drop(event)" /></div>
+<div class="inner" ><img src="JPEG/club.png" id="102" ondragover="allowdrop(event)" ondrop="drop(event)" /></div>
+<div class="inner" ><img src="JPEG/heart.png" id="103" ondragover="allowdrop(event)" ondrop="drop(event)" /></div>
+
+</div>
+<script>
+    const cardNames = [
+            '2C', '2D', '2H', '2S', 
+            '3C', '3D', '3H', '3S', 
+            '4C', '4D', '4H', '4S', 
+            '5C', '5D', '5H', '5S', 
+            '6C', '6D', '6H', '6S', 
+            '7C', '7D', '7H', '7S', 
+            '8C', '8D', '8H', '8S', 
+            '9C', '9D', '9H', '9S', 
+            '10C', '10D', '10H', '10S',
+            'AC', 'AD', 'AH', 'AS',
+            'JC', 'JD', 'JH', 'JS', 
+            'KC', 'KD', 'KH', 'KS',
+            'QC', 'QD', 'QH', 'QS'];
+ 
+ var checkSelected=new Array(52);
+ var count=0;
+for(let i=0;i<cardNames.length;){
+    var index=Math.floor(Math.random()* 52);
+    if(checkSelected[index]==null){
+        var img=document.createElement("img");
+        img.src=`JPEG/${cardNames[index]}.jpg`;;
+        img.id=i;
+        checkSelected[index]="selected";
+        img.draggable="true";
+        img.className=`${cardNames[index].charAt((cardNames[index].length)-1)}`;
+        console.log(img.className);
+        img.ondragstart=function(){drag(event);};
+
+        document.getElementById("CardsDisplayContainer").appendChild(img);
+        i++;
+    }
+}
+function allowdrop(ev){
+ ev.preventDefault();
+}
+function drag(ev){
+    ev.dataTransfer.setData("image",ev.target.id);
+}
+
+function drop(ev){
+var image=document.getElementById(ev.dataTransfer.getData("image"));
+if(ev.target.id==100 && image.className=="S"){
+image.remove();
+count++;
+}
+if(ev.target.id==101 && image.className=="D"){
+image.remove();
+count++;
+}
+if(ev.target.id==102 && image.className=="C"){
+image.remove();
+count++;
+}
+if(ev.target.id==103 && image.className=="H"){
+image.remove();
+count++;
+}
+
+if(count==52){
+ document.getElementById("CardsDisplayContainer").innerHTML="<h1>YOU WON</h1>";
+ var button=document.createElement("button");
+ button.textContent="Restart";
+ button.id="restart-button"
+ button.onclick=function(){restart()};
+ document.getElementById("CardsDisplayContainer").appendChild(button);
+}
+}
+
+function restart(){
+    count=0;
+    document.getElementById("restart-button").remove();
+    document.getElementById("CardsDisplayContainer").innerHTML="";
+    checkSelected=[];
+    for(let i=0;i<cardNames.length;){
+    var index=Math.floor(Math.random()* 52);
+    if(checkSelected[index]==null){
+        var img=document.createElement("img");
+        img.src=`JPEG/${cardNames[index]}.jpg`;
+        img.id=i;
+        checkSelected[index]="selected";
+        img.draggable="true";
+        img.className=`${cardNames[index].charAt((cardNames[index].length)-1)}`;
+        console.log(img.className);
+        img.ondragstart=function(){drag(event);};
+
+        document.getElementById("CardsDisplayContainer").appendChild(img);
+        i++;
+    }
+ }
+}
+</script>
+</body>
+</html>
